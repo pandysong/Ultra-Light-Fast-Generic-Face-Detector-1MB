@@ -279,14 +279,14 @@ if __name__ == '__main__':
         logging.info("Freeze all the layers except prediction heads.")
     else:
         params = [
-            {'params': net.module.base_net.parameters(), 'lr': base_net_lr},
+            {'params': net.base_net.parameters(), 'lr': base_net_lr},
             {'params': itertools.chain(
-                net.module.source_layer_add_ons.parameters(),
-                net.module.extras.parameters()
+                net.source_layer_add_ons.parameters(),
+                net.extras.parameters()
             ), 'lr': extra_layers_lr},
             {'params': itertools.chain(
-                net.module.regression_headers.parameters(),
-                net.module.classification_headers.parameters()
+                net.regression_headers.parameters(),
+                net.classification_headers.parameters()
             )}
         ]
 
@@ -356,5 +356,5 @@ if __name__ == '__main__':
                 f"Validation Classification Loss: {val_classification_loss:.4f}"
             )
             model_path = os.path.join(args.checkpoint_folder, f"{args.net}-Epoch-{epoch}-Loss-{val_loss}.pth")
-            net.module.save(model_path)
+            net.save(model_path)
             logging.info(f"Saved model {model_path}")
